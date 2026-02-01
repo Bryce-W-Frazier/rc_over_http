@@ -16,7 +16,6 @@ const http = express();
 const Gpio = require('pigpio').Gpio;
 const led  = new Gpio(4, { mode: Gpio.OUTPUT });
 const steering = new Gpio(18, {mode: Gpio.OUTPUT});
-let isOn = false;
 
 http.use(express.static(path.join(__dirname, 'client/')));
 
@@ -35,20 +34,24 @@ http.listen(3000, () => {
 // ##########################################################
 
 // React to button
-http.post('/clicked', (req, res) => {
+http.post('/throttle', (req, res) => {
   console.log('Button was pressed on the frontend!');
   res.send('Action received by Node.js!');
 
   // Toggle LED
-  isOn = !isOn;
-  led.digitalWrite(isOn ? 1 : 0);
+  led.digitalWrite(1);
+});
 
-  //Servo
-  if (isOn) {
-    steering.servoWrite(500);
-  } else {
-    steering.servoWrite(2400);
-  }
+http.post('/steer_left', (req, res) => {
+  steering.servoWrite(500);
+});
+
+http.post('/steer_right', (req, res) => {
+  steering.servoWrite(2400);
+});
+
+http.post('/steer_center', (req, res) => {
+  steering.servoWrite(1500);
 });
 
 
