@@ -15,11 +15,11 @@ const http = express();
 const Gpio = require('onoff').Gpio;
 const led  = new Gpio(4, 'out');
 
-http.use(express.static(path.join(__dirname)));
+http.use(express.static(path.join(__dirname, 'client/')));
 
 // Init server
 http.get('/', async(req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'client/', 'index.html'));
 });
 
 // Use port 3000
