@@ -7,8 +7,8 @@
 # Started: 2026-01-31
 
 read -p "Server Address: " address
-read -ps "Server password: " password
+read -sp "Server password: " password
 
-scp server/* $address/
+scp server/* $address:~/server
 ssh $address 'sudo mv server/* /var/node'
 
