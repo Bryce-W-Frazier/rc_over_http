@@ -7,51 +7,53 @@
 // Init 
 // ############################################################
 
-// Import Modules
+// HTTP init
 const express = require('express');
 const path = require('path');
-const http = express();
+const app = express();
+
+// Socket init
+const http = require('http');
+const { Server } = require('socket.io');
+const socketServer = http.createServer(app);
+const io = new Server(socketServer);
 
 //Gpio init
 const Gpio = require('pigpio').Gpio;
 const led  = new Gpio(4, { mode: Gpio.OUTPUT });
 const steering = new Gpio(18, {mode: Gpio.OUTPUT});
 
-http.use(express.static(path.join(__dirname, 'client/')));
 
-// Init server
-http.get('/', async(req, res) => {
+// Start server
+app.use(express.static(path.join(__dirname, 'client/')));
+
+app.get('/', async(req, res) => {
   res.sendFile(path.join(__dirname, 'client/', 'index.html'));
 });
 
-// Use port 3000
-http.listen(3000, () => {
+/*app.listen(3000, () => {
   console.log("this is a server");
-});
+});*/
+
+
 
 // ##########################################################
 // Main Section
 // ##########################################################
 
-// React to button
-http.post('/throttle', (req, res) => {
-  console.log('Button was pressed on the frontend!');
-  res.send('Action received by Node.js!');
 
-  // Toggle LED
-  led.digitalWrite(1);
+io.on('connection', (socket) => {
+  console.log('Client connected');
+
+  // Listen for 'move-servo' event from browser
+  socket.on('steer-to', (pulseWidth) => {
+    steering.servoWrite(pulseWidth);
+    console.log(`Moving to ${pulseWidth}us`);
+  });
 });
 
-http.post('/steer_left', (req, res) => {
-  steering.servoWrite(500);
-});
-
-http.post('/steer_right', (req, res) => {
-  steering.servoWrite(2400);
-});
-
-http.post('/steer_center', (req, res) => {
-  steering.servoWrite(1500);
+socketServer.listen(3000, () => {
+  console.log("started");
 });
 
 
@@ -63,3 +65,15 @@ process.on('SIGINT', () => {
   process.exit();
 });
 
+const servo_pulse_range = [500, 2400];
+const steer_vector_range = [-500, 500];
+
+// function mapRange
+// Take value and apply it to a differnt range
+function mapRange(value, oldRange, newRange) {
+  return ((value - oldRange[0]) * (newRange[1] - newRange[0]) / (oldRange[1] - oldRange[0])) + newRange[0];
+}
+
+function steer(steer_vector) {
+  servomapRange(steer_vector, steer_vector_range, servo_pulse_range);
+}
