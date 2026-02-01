@@ -12,8 +12,11 @@ const express = require('express');
 const path = require('path');
 const http = express();
 
-const Gpio = require('onoff').Gpio;
-const led  = new Gpio(4, 'out');
+//Gpio init
+const Gpio = require('pigpio').Gpio;
+const led  = new Gpio(4, { mode: Gpio.OUTPUT });
+const steering = new Gpio(18, {mode: Gpio.OUTPUT});
+let isOn = false;
 
 http.use(express.static(path.join(__dirname, 'client/')));
 
@@ -27,20 +30,33 @@ http.listen(3000, () => {
   console.log("this is a server");
 });
 
-//React to button
+// ##########################################################
+// Main Section
+// ##########################################################
+
+// React to button
 http.post('/clicked', (req, res) => {
   console.log('Button was pressed on the frontend!');
   res.send('Action received by Node.js!');
 
-  const currentState = led.readSync(); // Read current value (0 or 1)
-  led.writeSync(currentState === 0 ? 1 : 0);
+  // Toggle LED
+  isOn = !isOn;
+  led.digitalWrite(isOn ? 1 : 0);
+
+  //Servo
+  if (isOn) {
+    steering.servoWrite(500);
+  } else {
+    steering.servoWrite(2400);
+  }
 });
 
-//Clean up
+
+// Clean up
 // Clean up if the user presses Ctrl+C
 process.on('SIGINT', () => {
-  led.writeSync(0);
-  led.unexport();
+  led.digitalWrite(0);
+  steering.servoWrite(1500);
   process.exit();
 });
 
