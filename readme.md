@@ -16,6 +16,7 @@
 - express 5.2.1
 - pigpio 3.3.1
 - pm2 6.0.14
+- socket.io 4.8.3
 - nodemon 3.1.11 (For Testing)
 
 
