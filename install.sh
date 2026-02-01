@@ -8,4 +8,4 @@
 # Started: 2026-01-31
 
 
-sudo mv server/* /var/node
+sudo cp -r server/* /var/node
