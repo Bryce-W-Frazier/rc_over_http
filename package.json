@@ -1,0 +1,19 @@
+{
+  "name": "rc_over_http",
+  "version": "1.0.0",
+  "description": "Simple RC Car Controlled Over http",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bryce-W-Frazier/rc_over_http.git"
+  },
+  "author": "Bryce, Miko, Artyom",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Bryce-W-Frazier/rc_over_http/issues"
+  },
+  "homepage": "https://github.com/Bryce-W-Frazier/rc_over_http#readme"
+}
