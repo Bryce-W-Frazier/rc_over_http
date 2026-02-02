@@ -8,20 +8,26 @@
 // ############################################################
 
 // HTTP init
-const express = require('express');
-const path = require('path');
+/*const express = require('express');
+const path = require('path');*/
+import express from 'express';
+import path from 'path';
 const app = express();
 
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Socket init
-const http = require('http');
-const { Server } = require('socket.io');
+/*const http = require('http');
+const { Server } = require('socket.io');*/
+import http from 'http';
+import { Server } from 'socket.io';
 const socketServer = http.createServer(app);
 const io = new Server(socketServer);
 
-//Gpio init
-const Gpio = require('pigpio').Gpio;
-const led  = new Gpio(4, { mode: Gpio.OUTPUT });
-const steering = new Gpio(18, {mode: Gpio.OUTPUT});
+// Controller init
+import { steer } from './controller.js';
 
 
 // Start server
@@ -46,9 +52,9 @@ io.on('connection', (socket) => {
   console.log('Client connected');
 
   // Listen for 'move-servo' event from browser
-  socket.on('steer-to', (pulseWidth) => {
-    steering.servoWrite(pulseWidth);
-    console.log(`Moving to ${pulseWidth}us`);
+  socket.on('steer-to', (steer_vector) => {
+    steer(steer_vector);
+    console.log(`Moving to ${steer_vector}us`);
   });
 });
 
@@ -65,15 +71,3 @@ process.on('SIGINT', () => {
   process.exit();
 });
 
-const servo_pulse_range = [500, 2400];
-const steer_vector_range = [-500, 500];
-
-// function mapRange
-// Take value and apply it to a differnt range
-function mapRange(value, oldRange, newRange) {
-  return ((value - oldRange[0]) * (newRange[1] - newRange[0]) / (oldRange[1] - oldRange[0])) + newRange[0];
-}
-
-function steer(steer_vector) {
-  servomapRange(steer_vector, steer_vector_range, servo_pulse_range);
-}
