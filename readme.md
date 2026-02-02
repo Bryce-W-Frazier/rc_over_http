@@ -19,6 +19,11 @@
 - socket.io 4.8.3
 - nodemon 3.1.11 (For Testing)
 
+## Parts
+- Rasberry Pi 3 B
+- [7.4v to 5v](https://www.dfrobot.com/product-2240.html)
+- 7.4v Battery
+- Tower Pro SG90 Analog Servo
 
 ## TODO
 ### Bare Minimum for CS F453 🤖
