@@ -7,12 +7,16 @@
 //const Gpio = require('pigpio').Gpio;
 import pkg from 'pigpio';
 const { Gpio } = pkg;
-const led  = new Gpio(4, { mode: Gpio.OUTPUT });
+
 const steering = new Gpio(18, {mode: Gpio.OUTPUT});
+const throttle = new Gpio(26, {mode: Gpio.OUTPUT});
 
 // Input and output ranges
 const servo_pulse_range = [500, 2400];
 const steer_vector_range = [-500, 500];
+
+const throttle_pwm_range = [0, 255];
+const throttle_level_range = [0, 100];
 
 // function mapRange
 // Take value and apply it to a differnt range
@@ -25,5 +29,9 @@ export const Controller = {
   // take steer vector, convert to pwm and move steer servo
   steer: function (steer_vector) {
     steering.servoWrite( mapRange(steer_vector, steer_vector_range, servo_pulse_range) );
-  }
+  },
+
+  setThrottle: function (throttle_level) {
+    throttle.pwmWrite(mapRange(throttle_level, throttle_level_range, throttle_pwm_range) );
+  },
 }

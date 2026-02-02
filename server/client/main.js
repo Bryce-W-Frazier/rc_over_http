@@ -18,15 +18,24 @@ window.addEventListener("keyup", (e) => Keys[e.code] = false);
 // Calculate User Input Vectors
 window.setInterval( () => {
   let steer_vector = 0;
-  
+  let throttle = 0;
+ 
+  //Steering
   if (Keys["KeyD"]) {
-    steer_vector += 500;
+    steer_vector += -500;
   } 
   if (Keys["KeyA"]) {
-    steer_vector += -500;
+    steer_vector += 500;
   }
 
+  //Throttle
+  if (Keys["KeyW"]) {
+    throttle += 100;
+  }
+
+  //Send Inputs
   socket.emit('steer-to', steer_vector);
+  socket.emit('throttle-to', throttle);
 }, 10);
 
 

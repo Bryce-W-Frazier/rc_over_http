@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
   socket.on('steer-to', (steer_vector) => {
     Controller.steer(steer_vector);
   });
+
+  socket.on('throttle-to', (throttle_level) => {
+    Controller.setThrottle(throttle_level);
+  }); 
 });
 
 socketServer.listen(3000, () => {
