@@ -1,3 +1,8 @@
+// main.js
+// Interface client with server
+// Bryce W. Frazier
+// Started: 2026-01-31
+
 const socket = io();
 
 window.addEventListener('keydown', () => {
