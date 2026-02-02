@@ -55,8 +55,6 @@ socketServer.listen(3000, () => {
 
 // Clean up
 process.on('SIGINT', () => {
-  led.digitalWrite(0);
-  steering.servoWrite(1500);
   process.exit();
 });
 
