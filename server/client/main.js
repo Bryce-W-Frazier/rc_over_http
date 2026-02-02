@@ -6,35 +6,27 @@
 // Open Web Socket With Werver
 const socket = io();
 
-// RC Control vars
-let steer_vector = 0;
+let changed = false; //TODO notifiy server only if input changes
+
+//Key Tracker
+const Keys = {};
+
+window.addEventListener("keydown", (e) => Keys[e.code] = true);
+window.addEventListener("keyup", (e) => Keys[e.code] = false);
+
 
 // Calculate User Input Vectors
-window.addEventListener('keydown', () => {
-  if (event.repeat) return;
+window.setInterval( () => {
+  let steer_vector = 0;
   
-  if (event.key == 'd') {
-    socket.emit('steer-to', -500);
+  if (Keys["KeyD"]) {
+    steer_vector += 500;
   } 
-  if (event.key == 'a') {
-    socket.emit('steer-to', 500);
+  if (Keys["KeyA"]) {
+    steer_vector += -500;
   }
 
-  socket.emit(steer-to, steer_vector);
-});
-
-window.addEventListener('keyup', () => {
-  if (event.repeat) return;
-
-  if (event.key == 'a' || event.key == 'd') {
-    socket.emit('steer-to', 0);
-  }
-});
-
-// Send Input Vectors to Server
-/*setInterval(() => {
   socket.emit('steer-to', steer_vector);
+}, 10);
 
-  // Reset Input Vectors
-  steer_vector = 0;
-}, 50);*/
+
