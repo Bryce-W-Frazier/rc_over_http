@@ -23,7 +23,7 @@ const socketServer = http.createServer(app);
 const io = new Server(socketServer);
 
 // Controller init
-import { steer } from './controller.js';
+import { Controller } from './controller.js';
 
 
 // Start server
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
   console.log('Client connected');
 
   socket.on('steer-to', (steer_vector) => {
-    steer(steer_vector);
+    Controller.steer(steer_vector);
   });
 });
 

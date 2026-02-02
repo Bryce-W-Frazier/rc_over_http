@@ -20,6 +20,10 @@ function mapRange(value, oldRange, newRange) {
   return ((value - oldRange[0]) * (newRange[1] - newRange[0]) / (oldRange[1] - oldRange[0])) + newRange[0];
 }
 
-export function steer(steer_vector) {
-  steering.servoWrite( mapRange(steer_vector, steer_vector_range, servo_pulse_range) );
+export const Controller = {
+  // function steer
+  // take steer vector, convert to pwm and move steer servo
+  steer: function (steer_vector) {
+    steering.servoWrite( mapRange(steer_vector, steer_vector_range, servo_pulse_range) );
+  }
 }
