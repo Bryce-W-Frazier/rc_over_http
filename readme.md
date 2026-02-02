@@ -2,10 +2,8 @@
 
 ## Dependencies
 ### System
-- Raspberry Pi 3B
-      - Not Tested on 1B, 2B, 4B, and 5B
-- Debian 13 ARM 64
-      - Not Tested on other Debian Systems or 32 ARM
+- Raspberry Pi 3 B, Not Tested on 1B, 2B, 4B, and 5B
+- Debian 13 ARM 64, Not Tested on other Debian Systems or 32 ARM
 
 ### Apt Packages
 - pigpio
@@ -21,7 +19,7 @@
 
 ## Parts
 - Rasberry Pi 3 B
-- [7.4v to 5v](https://www.dfrobot.com/product-2240.html)
+- [7.4v to 5v Converter](https://www.dfrobot.com/product-2240.html)
 - 7.4v Battery
 - Tower Pro SG90 Analog Servo
 
@@ -42,8 +40,8 @@
     - [ ] Client Fail
 
 ### Car 🚗
-- [ ] Motor & Servo Control
-- [ ] Car Body & Wheels
+- [x] Motor & Servo Control
+- [ ] Car Body & Wheels, [Inspiration](https://www.youtube.com/watch?v=woU6myQ0aYo)
 - [ ] Power Supply
 - [ ] Powertrain
 - [ ] Steering
