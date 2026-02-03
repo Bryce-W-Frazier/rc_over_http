@@ -18,10 +18,23 @@
 - nodemon 3.1.11 (For Testing)
 
 ## Parts
-- Rasberry Pi 3 B
-- [7.4v to 5v Converter](https://www.dfrobot.com/product-2240.html)
-- 7.4v Battery
-- Tower Pro SG90 Analog Servo
+### Pre-Fabricated
+- [ ] [Rasberry Pi 3 B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/)
+- Power
+  - [ ] [7.4v to 5v Converter](https://www.dfrobot.com/product-2240.html)
+  - [ ] [18650 Battery Holder in S2-4](https://www.amazon.com/gp/product/B098DRV5K1)
+- Drivetrain & Control
+  - [ ] [Tower Pro SG90 Analog Servo](https://towerpro.com.tw/product/sg90-analog/)
+  - [ ] Brushed DC Motor 7.4v to 16.8v
+  - [ ] Brushed DC ESC 7.4v to 16.8v
+  - [ ] Bearings
+
+### Custom Fabricated, [Inspiration](https://www.youtube.com/watch?v=woU6myQ0aYo)
+- [ ] Car Body
+- [ ] Wheels
+- [ ] Drive Pulleys/Gears
+- [ ] Rear Axle
+- [ ] Steering Pivots & Rod
 
 ## TODO
 ### Bare Minimum for CS F453 🤖
@@ -41,7 +54,7 @@
 
 ### Car 🚗
 - [x] Motor & Servo Control
-- [ ] Car Body & Wheels, [Inspiration](https://www.youtube.com/watch?v=woU6myQ0aYo)
+- [ ] Car Body & Wheels
 - [ ] Power Supply
 - [ ] Powertrain
 - [ ] Steering
