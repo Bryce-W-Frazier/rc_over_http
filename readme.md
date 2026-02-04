@@ -21,7 +21,7 @@
 ### Pre-Fabricated
 - [x] [Rasberry Pi 3 B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/)
 - Power
-  - [ ] [7-24v to 5v Converter](https://www.dfrobot.com/product-2240.html)
+  - [x] 7-12 to 5v Converter
   - [ ] [18650 Battery Holder in S2-4](https://www.amazon.com/gp/product/B098DRV5K1)
 - Drivetrain & Control
   - [x] [Tower Pro SG90 Analog Servo](https://towerpro.com.tw/product/sg90-analog/)
