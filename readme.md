@@ -21,20 +21,20 @@
 ### Pre-Fabricated
 - [x] [Rasberry Pi 3 B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/)
 - Power
-  - [ ] [7.4v to 5v Converter](https://www.dfrobot.com/product-2240.html)
+  - [ ] [7-24v to 5v Converter](https://www.dfrobot.com/product-2240.html)
   - [ ] [18650 Battery Holder in S2-4](https://www.amazon.com/gp/product/B098DRV5K1)
 - Drivetrain & Control
   - [x] [Tower Pro SG90 Analog Servo](https://towerpro.com.tw/product/sg90-analog/)
-  - [ ] Brushed DC Motor 7.4v to 16.8v
-  - [ ] Brushed DC ESC 7.4v to 16.8v
-  - [ ] Bearings
+  - [ ] [Brushed DC Motor 6-12v](https://www.amazon.com/gp/product/B01M58POHF?smid=A1EPDRGYFZ55O7) (S4 18650 May Overdrive)
+  - [ ] [L298N Motor Driver](https://www.amazon.com/WWZMDiB-L298N-H-Bridge-Controller-Raspberry/dp/B0CR6BX5QL)
+  - [ ] [606 Ball Bearings](https://www.amazon.com/gp/product/B0BRQQDRCR?smid=A3V84ASJQQ5YY4)
 
 ### Custom Fabricated
 [Inspiration](https://www.youtube.com/watch?v=woU6myQ0aYo)
 - [ ] Car Body
-- [ ] Wheels
+- [ ] Wheels 30-35mm Diameter
 - [ ] Drive Pulleys/Gears
-- [ ] Rear Axle
+- [ ] 6mm Diameter Rear Axle
 - [ ] Steering Pivots & Rod
 
 ## TODO
