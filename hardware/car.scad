@@ -2,7 +2,8 @@
 // Body of the car and it's conponets
 // units in mm
 // Bryce W. Frazier
-// 2026-02-06
+// Started: 2026-02-06
+// Updated: 2026-02-07
 
 // 606 Bearing
 bearing_d = 17;
@@ -31,7 +32,7 @@ body_thic = 4;
 axel_access = 12;
 wheel_lift = 2;
 
-
+// Drivetrain
 module rearBearingMount() { 
     translate([0, rear_mount_d, -wheel_lift-rear_mount_d/2])
     rotate([90, 0, 90]) {
@@ -75,6 +76,7 @@ module motorMount() {
     };
 }
 
+// Steering
 module steeringWheelMount() {
     dist_from_body = rear_mount_d/2 + wheel_lift;
     hub_l = 11.5;
@@ -127,6 +129,7 @@ module priTieRod() {
     rod_l = 0;
 }
 
+// Overall Car
 module mainBody() {
 
     difference(){
