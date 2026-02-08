@@ -31,12 +31,19 @@ motor_strap_gap = 2;
 steer_bearing_dis = 3;
 steer_pin_d = 4;
 
+hub_l = 11.5;
+front_axle_stop = 2;
+front_axle_l = front_axle_stop+hub_l+1+axle_insert;
+
+
 // Body Specs
 body_w = 80;
 body_l = 125;
 body_thic = 4;
 axel_access = 12;
 wheel_lift = 2;
+
+wheel_depth = wheel_lift+rear_mount_d/2;
 
 // Wheels and Axles
 module axle(l, d) {
@@ -45,6 +52,14 @@ module axle(l, d) {
         
         translate([-(d*3)/4, 0, l/2])
             cube([d, d, l], center=true);
+    }
+}
+
+module frontAxle() {
+    translate([-front_axle_l, 0, 0])
+    rotate([0, 90, 0]) {
+        axle(front_axle_l, inner_bearing_d);
+        axle(front_axle_stop, inner_bearing_d+1);
     }
 }
 
@@ -92,7 +107,6 @@ module motorMount() {
 // Steering
 module steeringWheelMount() {
     dist_from_body = rear_mount_d/2 + wheel_lift;
-    hub_l = 11.5;
     
     rod_to_frnt_l = 20;
     
@@ -143,6 +157,18 @@ module priTieRod() {
 }
 
 // Overall Car
+module steeringMountAndWheel() {
+    steeringWheelMount();
+    
+    rotate([0, 0, 180])
+    translate([(hub_l-bearing_w+front_axle_l-front_axle_stop), 0, -wheel_lift-rear_mount_d/2])
+        frontAxle();
+    
+    rotate([0, -90, 0])
+    translate([-wheel_depth, 0, hub_l+1])
+    rotate([0, 0, 180])
+        wheel();
+}
 module mainBody() {
     // Servo Specs 
     // Tower Pro SG90
@@ -233,14 +259,13 @@ module wholeCar () {
     
     // Steering
     translate([bearing_d/2+3, body_l- bearing_d/2-3, 0])
-        steeringWheelMount();
+        steeringMountAndWheel();
     translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 0])
     mirror([1, 0, 0])
-        steeringWheelMount();
+        steeringMountAndWheel();
 }
 
 
 
-//wholeCar();
-//axle(20, 6);
-wheel();
+wholeCar();
+//steeringMountAndWheel();
