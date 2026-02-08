@@ -203,10 +203,10 @@ module mainBody() {
         cube([servo_w+servo_tab*2, servo_mount_l, servo_h], center=true);
         cube([servo_w, servo_mount_l, servo_h], center=true);
         rotate([-90, 0, 0]) {
-            translate([(servo_w+servo_tab)/2, 0, 0])
-                cylinder(h=servo_mount_l, d=servo_mount_screw);
-            translate([-(servo_w+servo_tab)/2, 0, 0])
-                cylinder(h=servo_mount_l, d=servo_mount_screw);
+            translate([(servo_w+servo_tab)/2, 0, -servo_mount_l/2])
+                cylinder(h=servo_mount_l*2, d=servo_mount_screw);
+            translate([-(servo_w+servo_tab)/2, 0, -servo_mount_l/2])
+                cylinder(h=servo_mount_l*2, d=servo_mount_screw);
         }
     }
 }
