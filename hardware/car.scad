@@ -25,21 +25,25 @@ body_w = 80;
 body_l = 125;
 body_thic = 4;
 axel_access = 12;
+wheel_lift = 2;
 
 
 module rearBearingMount() { 
-    translate([0, rear_mount_d, -rear_mount_d/2])
-    rotate([90, 0, 90])
-    difference() {
-        union() {
-            cylinder(h=bearing_w, d = rear_mount_d);
-            
-            translate([0, rear_mount_d/2, 0])
-                cylinder(h=bearing_w, d =rear_mount_d*2);
-       }
-       translate([0, rear_mount_d, bearing_w/2])
-                cube([rear_mount_d*2, rear_mount_d, bearing_w], center=true); 
-       cylinder(h=bearing_w, d=bearing_d);
+    translate([0, rear_mount_d, -wheel_lift-rear_mount_d/2])
+    rotate([90, 0, 90]) {
+        difference() {
+            union() {
+                cylinder(h=bearing_w, d = rear_mount_d);
+                
+                translate([0, rear_mount_d/2, 0])
+                    cylinder(h=bearing_w, d =rear_mount_d*2);
+           }
+           translate([0, rear_mount_d, bearing_w/2])
+                    cube([rear_mount_d*2, rear_mount_d, bearing_w], center=true); 
+           cylinder(h=bearing_w, d=bearing_d);
+        }
+        translate([0, (rear_mount_d + wheel_lift)/2, bearing_w/2])
+            cube([rear_mount_d*2, wheel_lift, bearing_w], center=true);
     }
 }
 
@@ -68,9 +72,11 @@ module motorMount() {
 }
 
 module steering_wheel_mount() {
+    dist_from_body = rear_mount_d/2 + rear_mount_thic + wheel_lift;
+    
     cylinder(h=body_thic+4, d=inner_bearing_d);
-    translate([0, 0, -rear_mount_d/2-rear_mount_thic]) {
-        cylinder(h=rear_mount_d/2+rear_mount_thic, d=inner_bearing_d);
+    translate([0, 0, -dist_from_body]) {
+        cylinder(h=dist_from_body, d=inner_bearing_d);
         rotate([0,-90,0])
             cylinder(h=10, d=rear_mount_d);
     }
@@ -156,3 +162,4 @@ module wholeCar () {
 
 
 wholeCar();
+//rearBearingMount();
