@@ -20,6 +20,13 @@ motor_mount_w = motor_d+2;
 motor_strap_w = 13;
 motor_strap_gap = 2;
 
+// Body Specs
+body_w = 80;
+body_l = 125;
+body_thic = 4;
+axel_access = 12;
+
+
 module rearBearingMount() { 
     translate([0, rear_mount_d, -rear_mount_d/2])
     rotate([90, 0, 90])
@@ -51,65 +58,61 @@ module axle() {
 }
 
 module motorMount() {
+    translate([0, motor_mount_w/2, motor_mount_w/2])
+    rotate([90, 0, 90])
     difference() {
         translate([0, -motor_mount_w/4, motor_l/2])
             cube([motor_mount_w, motor_mount_w/2, motor_l], center=true);
         cylinder(h=motor_l, d=motor_d);
-    }
+    };
 }
 module mainBody() {
-    
-    width = 80;
-    length = 125;
-    thicness = 4;
-    
-    axel_access = 12;
 
     difference(){
         union() {
-            cube([width, length, thicness], center=false);
+            cube([body_w, body_l, body_thic], center=false);
             
     // Drive Train ################################################
             // Axle Mount
             rearBearingMount();
-            translate([width - bearing_w, 0, 0]) rearBearingMount();
+            translate([body_w - bearing_w, 0, 0]) rearBearingMount();
         }
     // Access of Axle for Beltdrive
     translate([bearing_w, rear_mount_d/4, 0]) 
-        cube([axel_access, (rear_mount_d*3)/2, thicness]);
+        cube([axel_access, (rear_mount_d*3)/2, body_thic]);
     
     // Motor Straps
     translate(
     [bearing_w + axel_access + motor_l/8, rear_mount_d/4 - motor_strap_gap, 0])
-        cube([motor_strap_w, motor_strap_gap, thicness]);    
+        cube([motor_strap_w, motor_strap_gap, body_thic]);    
     translate(
     [bearing_w + axel_access + 7*motor_l/8, rear_mount_d/4 - motor_strap_gap, 0])
-        cube([motor_strap_w, motor_strap_gap, thicness]);   
+        cube([motor_strap_w, motor_strap_gap, body_thic]);   
     translate(
     [bearing_w + axel_access + motor_l/8, rear_mount_d/4 + (rear_mount_d*3)/2, 0])
-        cube([motor_strap_w, motor_strap_gap, thicness]);    
+        cube([motor_strap_w, motor_strap_gap, body_thic]);    
     translate(
     [bearing_w + axel_access + 7*motor_l/8, rear_mount_d/4 + (rear_mount_d*3)/2, 0])
-        cube([motor_strap_w, motor_strap_gap, thicness]); 
+        cube([motor_strap_w, motor_strap_gap, body_thic]); 
         
     // Steering ###################################################
     // Bearing Holes
-    translate([bearing_d/2+3, length - bearing_d/2-3, -3])
+    translate([bearing_d/2+3, body_l - bearing_d/2-3, -3])
         cylinder(h=bearing_w, d=bearing_d);
-    translate([width-(bearing_d/2+3), length - (bearing_d/2+3), -3])
+    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), -3])
         cylinder(h=bearing_w, d=bearing_d);
         
-    translate([bearing_d/2+3, length- bearing_d/2-3, 3])
+    translate([bearing_d/2+3, body_l- bearing_d/2-3, 3])
         cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
-    translate([width-(bearing_d/2+3), length- bearing_d/2-3, 3])
+    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 3])
         cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
     }
-    translate([bearing_d/2+3, length - (bearing_d/2+3), -3])
+    translate([bearing_d/2+3, body_l - (bearing_d/2+3), -3])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
     };
-    translate([width-(bearing_d/2+3), length - (bearing_d/2+3), -3])
+    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), -3])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
@@ -117,6 +120,10 @@ module mainBody() {
     
 }
 
+module wholeCar () {
+    mainBody();
+    translate([bearing_w + axel_access + motor_l/8, rear_mount_d/4, body_thic])
+        motorMount();
+}
 
-mainBody();
-//motorMount
+wholeCar();
