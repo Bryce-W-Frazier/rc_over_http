@@ -66,6 +66,16 @@ module motorMount() {
         cylinder(h=motor_l, d=motor_d);
     };
 }
+
+module steering_wheel_mount() {
+    cylinder(h=body_thic+4, d=inner_bearing_d);
+    translate([0, 0, -rear_mount_d/2-rear_mount_thic]) {
+        cylinder(h=rear_mount_d/2+rear_mount_thic, d=inner_bearing_d);
+        rotate([0,-90,0])
+            cylinder(h=10, d=rear_mount_d);
+    }
+}
+
 module mainBody() {
 
     difference(){
@@ -97,33 +107,52 @@ module mainBody() {
         
     // Steering ###################################################
     // Bearing Holes
-    translate([bearing_d/2+3, body_l - bearing_d/2-3, -3])
+    translate([bearing_d/2+3, body_l - bearing_d/2-3, 0])
         cylinder(h=bearing_w, d=bearing_d);
-    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), -3])
-        cylinder(h=bearing_w, d=bearing_d);
-        
-    translate([bearing_d/2+3, body_l- bearing_d/2-3, 3])
-        cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
-    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 3])
-        cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
-    }
-    translate([bearing_d/2+3, body_l - (bearing_d/2+3), -3])
+    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), 0])
+        cylinder(h=bearing_w, d=bearing_d);      
+    
+    } // End of difference()
+    
+    translate([bearing_d/2+3, body_l - (bearing_d/2+3), 0])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
     };
-    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), -3])
+    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), 0])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
     };
     
+    translate([bearing_d/2+3, body_l- bearing_d/2-3, bearing_w])
+        difference() {
+            cylinder(h=2, d=bearing_d+3);
+            cylinder(h=2, d=(inner_bearing_d+bearing_d)/2);
+        }
+    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, bearing_w])
+        difference() {
+            cylinder(h=2, d=bearing_d+3);
+            cylinder(h=2, d=(inner_bearing_d+bearing_d)/2);
+        }
+    
 }
 
 module wholeCar () {
     mainBody();
+    
+    // Powertrain
     translate([bearing_w + axel_access + motor_l/8, rear_mount_d/4, body_thic])
         motorMount();
+    
+    // Steering
+    translate([bearing_d/2+3, body_l- bearing_d/2-3, 3])
+        steering_wheel_mount();
+    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 3])
+    rotate([0, 0, 180])
+        steering_wheel_mount();
 }
+
+
 
 wholeCar();
