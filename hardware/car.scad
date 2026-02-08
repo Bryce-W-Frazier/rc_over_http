@@ -49,13 +49,14 @@ module axle(l, d) {
 }
 
 module wheel() {
+    translate([0, 0, wheel_w])
+    rotate([180, 0, 0])
     difference() {
         cylinder(h=wheel_w, d=wheel_d);
         cylinder(h=wheel_w-axle_insert, d=wheel_d-rim);
-    }
-    rotate([-90, 0, 0])
-    translate([0, 0, 0])
+        translate([0, 0, wheel_w-axle_insert])
             axle(axle_insert, inner_bearing_d);
+    }
 }
 
 // Drivetrain
@@ -241,5 +242,5 @@ module wholeCar () {
 
 
 //wholeCar();
-axle(20, 6);
-//wheel();
+//axle(20, 6);
+wheel();
