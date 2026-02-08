@@ -6,6 +6,7 @@
 
 // 606 Bearing
 bearing_d = 17;
+inner_bearing_d = 6;
 bearing_w = 6;
 
 rear_mount_thic = 3;
@@ -63,7 +64,7 @@ module mainBody() {
     thicness = 4;
     
     axel_access = 12;
-    
+
     difference(){
         union() {
             cube([width, length, thicness], center=false);
@@ -90,9 +91,32 @@ module mainBody() {
     translate(
     [bearing_w + axel_access + 7*motor_l/8, rear_mount_d/4 + (rear_mount_d*3)/2, 0])
         cube([motor_strap_w, motor_strap_gap, thicness]); 
+        
+    // Steering ###################################################
+    // Bearing Holes
+    translate([bearing_d/2+3, length - bearing_d/2-3, -3])
+        cylinder(h=bearing_w, d=bearing_d);
+    translate([width-(bearing_d/2+3), length - (bearing_d/2+3), -3])
+        cylinder(h=bearing_w, d=bearing_d);
+        
+    translate([bearing_d/2+3, length- bearing_d/2-3, 3])
+        cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
+    translate([width-(bearing_d/2+3), length- bearing_d/2-3, 3])
+        cylinder(h=3, d=(inner_bearing_d+bearing_d)/2);
     }
+    translate([bearing_d/2+3, length - (bearing_d/2+3), -3])
+    difference() {
+        cylinder(h=bearing_w, d=bearing_d+3);
+        cylinder(h=bearing_w, d=bearing_d);
+    };
+    translate([width-(bearing_d/2+3), length - (bearing_d/2+3), -3])
+    difference() {
+        cylinder(h=bearing_w, d=bearing_d+3);
+        cylinder(h=bearing_w, d=bearing_d);
+    };
+    
 }
 
 
 mainBody();
-//motorMount();
+//motorMount
