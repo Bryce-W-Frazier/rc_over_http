@@ -13,6 +13,12 @@ bearing_w = 6;
 rear_mount_thic = 3;
 rear_mount_d = bearing_d+rear_mount_thic;
 
+// Wheel Specs
+wheel_d = 35;
+wheel_w = 10;
+axle_insert = 5;
+rim = 3;
+
 // Motor Specs
 motor_l = 47;
 motor_d = 28;
@@ -32,6 +38,26 @@ body_thic = 4;
 axel_access = 12;
 wheel_lift = 2;
 
+// Wheels and Axles
+module axle(l, d) {
+    difference() {
+        cylinder(h=l, d=d);
+        
+        translate([-(d*3)/4, 0, l/2])
+            cube([d, d, l], center=true);
+    }
+}
+
+module wheel() {
+    difference() {
+        cylinder(h=wheel_w, d=wheel_d);
+        cylinder(h=wheel_w-axle_insert, d=wheel_d-rim);
+    }
+    rotate([-90, 0, 0])
+    translate([0, 0, 0])
+            axle(axle_insert, inner_bearing_d);
+}
+
 // Drivetrain
 module rearBearingMount() { 
     translate([0, rear_mount_d, -wheel_lift-rear_mount_d/2])
@@ -50,20 +76,6 @@ module rearBearingMount() {
         translate([0, (rear_mount_d + wheel_lift)/2, bearing_w/2])
             cube([rear_mount_d*2, wheel_lift, bearing_w], center=true);
     }
-}
-
-module axle() {
-    axel_d = 6;
-    axel_l = 20;
-    
-    translate([0, 0, axel_d/4])
-    rotate([0, -90, 90])
-        difference() {
-            cylinder(h=axel_l, d=axel_d);
-            
-            translate([-(axel_d*3)/4, 0, axel_l/2])
-                cube([axel_d, axel_d, axel_l], center=true);
-        }
 }
 
 module motorMount() {
@@ -228,5 +240,6 @@ module wholeCar () {
 
 
 
-wholeCar();
-//rearBearingMount();
+//wholeCar();
+axle(20, 6);
+//wheel();
