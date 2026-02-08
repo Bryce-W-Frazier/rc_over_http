@@ -257,11 +257,24 @@ module wholeCar () {
     translate([bearing_w + axel_access + motor_l/8, rear_mount_d/4, body_thic])
         motorMount();
     
+    translate([-axle_insert*2-1, rear_mount_d, -wheel_depth])
+    rotate([0, 90, 0])
+        axle(body_w+axle_insert*4+2, inner_bearing_d);
+    translate([-1, rear_mount_d, -wheel_depth])
+    rotate([0, -90, 0])
+    rotate([0, 0, 180])
+        wheel();
+    translate([body_w+1, rear_mount_d, -wheel_depth])
+    rotate([0, 90, 0])
+        wheel();
+    
     // Steering
     translate([bearing_d/2+3, body_l- bearing_d/2-3, 0])
+    rotate([0, 0, 15])
         steeringMountAndWheel();
     translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 0])
     mirror([1, 0, 0])
+    rotate([0, 0, -15])
         steeringMountAndWheel();
 }
 
