@@ -20,6 +20,10 @@ motor_mount_w = motor_d+2;
 motor_strap_w = 13;
 motor_strap_gap = 2;
 
+// Steering
+steer_bearing_dis = 3;
+steer_pin_d = 4;
+
 // Body Specs
 body_w = 80;
 body_l = 125;
@@ -71,15 +75,56 @@ module motorMount() {
     };
 }
 
-module steering_wheel_mount() {
-    dist_from_body = rear_mount_d/2 + rear_mount_thic + wheel_lift;
+module steeringWheelMount() {
+    dist_from_body = rear_mount_d/2 + wheel_lift;
+    hub_l = 11.5;
     
-    cylinder(h=body_thic+4, d=inner_bearing_d);
-    translate([0, 0, -dist_from_body]) {
-        cylinder(h=dist_from_body, d=inner_bearing_d);
-        rotate([0,-90,0])
-            cylinder(h=10, d=rear_mount_d);
+    rod_to_frnt_l = 20;
+    
+    // Pivot Rod
+    difference() {
+        union(){
+            difference() {
+                cylinder(h=body_thic+8, d=inner_bearing_d);
+                
+                translate([0, 0, body_thic+5]) {
+                    rotate([0, 90, 0])
+                        cylinder(h=inner_bearing_d, d=2);
+                    rotate([0, -90, 0])
+                        cylinder(h=inner_bearing_d, d=2);
+                }
+            }    
+            translate([0, 0, -dist_from_body]) {
+                cylinder(h=dist_from_body, d=inner_bearing_d+1); // Also pivot rod
+                
+                // Bearing Hub
+                rotate([0,-90,0])
+                difference() {
+                    cylinder(h=hub_l, d=rear_mount_d);
+                    translate([0, 0, hub_l-bearing_w]) {
+                        cylinder(h=bearing_w, d=bearing_d);
+                    }
+                };
+                
+                // Secondary Tie Rod
+                rotate([-90,0,0])
+                    cylinder(h=rod_to_frnt_l, d=6);
+                translate([0,rod_to_frnt_l,0]) {
+                    sphere(d=6);
+                    cylinder(h=10, d=steer_pin_d);
+                }
+            }
+        }
+        translate([0, 0, -dist_from_body])
+        rotate([0, 90,0])
+        translate([0, 0, -(hub_l-bearing_w)])
+            cylinder(h=rod_to_frnt_l, d=inner_bearing_d+2);
     }
+}
+
+module priTieRod() {
+    holes = steer_pin_d+1;
+    rod_l = 0;
 }
 
 module mainBody() {
@@ -113,30 +158,30 @@ module mainBody() {
         
     // Steering ###################################################
     // Bearing Holes
-    translate([bearing_d/2+3, body_l - bearing_d/2-3, 0])
+    translate([bearing_d/2+steer_bearing_dis, body_l - bearing_d/2-steer_bearing_dis, 0])
         cylinder(h=bearing_w, d=bearing_d);
-    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), 0])
+    translate([body_w-(bearing_d/2+steer_bearing_dis), body_l - (bearing_d/2+steer_bearing_dis), 0])
         cylinder(h=bearing_w, d=bearing_d);      
     
     } // End of difference()
     
-    translate([bearing_d/2+3, body_l - (bearing_d/2+3), 0])
+    translate([bearing_d/2+steer_bearing_dis, body_l - (bearing_d/2+steer_bearing_dis), 0])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
     };
-    translate([body_w-(bearing_d/2+3), body_l - (bearing_d/2+3), 0])
+    translate([body_w-(bearing_d/2+steer_bearing_dis), body_l - (bearing_d/2+steer_bearing_dis), 0])
     difference() {
         cylinder(h=bearing_w, d=bearing_d+3);
         cylinder(h=bearing_w, d=bearing_d);
     };
     
-    translate([bearing_d/2+3, body_l- bearing_d/2-3, bearing_w])
+    translate([bearing_d/2+steer_bearing_dis, body_l- bearing_d/2-steer_bearing_dis, bearing_w])
         difference() {
             cylinder(h=2, d=bearing_d+3);
             cylinder(h=2, d=(inner_bearing_d+bearing_d)/2);
         }
-    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, bearing_w])
+    translate([body_w-(bearing_d/2+steer_bearing_dis), body_l- bearing_d/2-steer_bearing_dis, bearing_w])
         difference() {
             cylinder(h=2, d=bearing_d+3);
             cylinder(h=2, d=(inner_bearing_d+bearing_d)/2);
@@ -152,11 +197,11 @@ module wholeCar () {
         motorMount();
     
     // Steering
-    translate([bearing_d/2+3, body_l- bearing_d/2-3, 3])
-        steering_wheel_mount();
-    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 3])
-    rotate([0, 0, 180])
-        steering_wheel_mount();
+    translate([bearing_d/2+3, body_l- bearing_d/2-3, 0])
+        steeringWheelMount();
+    translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 0])
+    mirror([1, 0, 0])
+        steeringWheelMount();
 }
 
 
