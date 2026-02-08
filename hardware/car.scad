@@ -131,6 +131,13 @@ module priTieRod() {
 
 // Overall Car
 module mainBody() {
+    // Servo Specs 
+    // Tower Pro SG90
+    servo_w       = 23;
+    servo_tab     =  5;
+    servo_h       = 12;
+    servo_mount_l = 15;
+    servo_mount_screw = 2;
 
     difference(){
         union() {
@@ -189,7 +196,19 @@ module mainBody() {
             cylinder(h=2, d=bearing_d+3);
             cylinder(h=2, d=(inner_bearing_d+bearing_d)/2);
         }
-    
+        
+    // Servo Mount
+    translate([body_w/2, body_l-servo_mount_l/2, servo_h/2+body_thic])
+    difference() {
+        cube([servo_w+servo_tab*2, servo_mount_l, servo_h], center=true);
+        cube([servo_w, servo_mount_l, servo_h], center=true);
+        rotate([-90, 0, 0]) {
+            translate([(servo_w+servo_tab)/2, 0, 0])
+                cylinder(h=servo_mount_l, d=servo_mount_screw);
+            translate([-(servo_w+servo_tab)/2, 0, 0])
+                cylinder(h=servo_mount_l, d=servo_mount_screw);
+        }
+    }
 }
 
 module wholeCar () {
