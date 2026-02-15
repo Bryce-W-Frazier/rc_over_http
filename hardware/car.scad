@@ -281,9 +281,9 @@ module wholeCar () {
 
 
 
-wholeCar();
+//wholeCar();
 //steeringMountAndWheel();
-/*rotate([0, 90, 0])
+rotate([0, 90, 0])
 translate([-inner_bearing_d/2-1, 0, 0])
     steeringWheelMount();
 translate([0, 40, 2])
@@ -291,4 +291,4 @@ rotate([0,180,0])
     frontAxle();
 translate([0, -50, 0])
 translate([0, 0, 0])
-    wheel();*/
+    wheel();
