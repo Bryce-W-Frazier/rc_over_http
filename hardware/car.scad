@@ -59,7 +59,12 @@ module frontAxle() {
     translate([-front_axle_l, 0, 0])
     rotate([0, 90, 0]) {
         axle(front_axle_l, inner_bearing_d);
-        axle(front_axle_stop, inner_bearing_d+1);
+        difference() {
+            axle(front_axle_stop, inner_bearing_d+1);
+            translate([-inner_bearing_d/2+.5, -inner_bearing_d/2-.5, 0])
+                cube([1, inner_bearing_d+1, front_axle_stop]); 
+        }
+        
     }
 }
 
@@ -129,7 +134,11 @@ module steeringWheelMount() {
                 // Bearing Hub
                 rotate([0,-90,0])
                 difference() {
-                    cylinder(h=hub_l, d=rear_mount_d);
+                    union() {
+                        cylinder(h=hub_l, d=rear_mount_d);
+                        translate([0, 0, -inner_bearing_d/2-0.5])
+                            cylinder(h=inner_bearing_d+1, d=rear_mount_d);
+                    }
                     translate([0, 0, hub_l-bearing_w]) {
                         cylinder(h=bearing_w, d=bearing_d);
                     }
@@ -281,14 +290,17 @@ module wholeCar () {
 
 
 
-//wholeCar();
+wholeCar();
 //steeringMountAndWheel();
+
+/*
 rotate([0, 90, 0])
-translate([-inner_bearing_d/2-1, 0, 0])
+translate([-inner_bearing_d/2-0.5, 0, 0])
     steeringWheelMount();
-translate([0, 40, 2])
-rotate([0,180,0])
+translate([0, 40, 1.5])
+rotate([0,180, 0])
     frontAxle();
 translate([0, -50, 0])
 translate([0, 0, 0])
     wheel();
+*/
