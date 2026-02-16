@@ -187,6 +187,9 @@ module mainBody() {
     servo_h       = 12;
     servo_mount_l = 15;
     servo_mount_screw = 2;
+    
+    //Steering clearance
+    steering_cutout_angle = 50;
 
     difference(){
         union() {
@@ -216,6 +219,33 @@ module mainBody() {
         cube([motor_strap_w, motor_strap_gap, body_thic]); 
         
     // Steering ###################################################
+    // Body cutout of steering clearance
+    translate(
+    [bearing_d/4+steer_bearing_dis, 
+    body_l - bearing_d/2-steer_bearing_dis, 
+    0])
+        cube(
+        [rear_mount_d/2+steer_bearing_dis*2, 
+        rear_mount_d+steer_bearing_dis, 
+        body_thic*2], 
+        center=true);
+    translate([body_w-(bearing_d/4+steer_bearing_dis), 
+    (body_l - bearing_d/2-steer_bearing_dis), 
+    0])
+        cube(
+        [rear_mount_d/2+steer_bearing_dis*2, 
+        rear_mount_d+steer_bearing_dis, 
+        body_thic*2], 
+        center=true);
+    
+    translate([rear_mount_d, body_l -rear_mount_d-steer_bearing_dis, 0])
+    rotate([0, 0, 90+steering_cutout_angle])
+        cube([body_l, body_l, body_thic]);
+    translate([body_w-rear_mount_d, body_l -rear_mount_d-steer_bearing_dis, 0])
+    rotate([0, 0, -steering_cutout_angle])
+        cube([body_l, body_l, body_thic]);
+
+
     // Bearing Holes
     translate([bearing_d/2+steer_bearing_dis, body_l - bearing_d/2-steer_bearing_dis, 0])
         cylinder(h=bearing_w, d=bearing_d);
@@ -261,6 +291,8 @@ module mainBody() {
 }
 
 module wholeCar () {
+    demo_steer_angle = 0;
+    
     mainBody();
     
     // Powertrain
@@ -280,11 +312,11 @@ module wholeCar () {
     
     // Steering
     translate([bearing_d/2+3, body_l- bearing_d/2-3, 0])
-    rotate([0, 0, 15])
+    rotate([0, 0, demo_steer_angle])
         steeringMountAndWheel();
     translate([body_w-(bearing_d/2+3), body_l- bearing_d/2-3, 0])
     mirror([1, 0, 0])
-    rotate([0, 0, -15])
+    rotate([0, 0, -demo_steer_angle])
         steeringMountAndWheel();
 }
 
