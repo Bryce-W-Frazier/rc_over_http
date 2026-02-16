@@ -162,8 +162,20 @@ module steeringWheelMount() {
 }
 
 module priTieRod() {
-    holes = steer_pin_d+1;
-    rod_l = 0;
+    hole_d = steer_pin_d+1;
+    hole_spaceing = steer_pin_d+2;
+    rod_l = body_w-rear_mount_d+steer_pin_d+steer_bearing_dis/2;
+    
+    rotate([0, -90, 0])
+    difference() {
+        axle(rod_l, hole_spaceing);
+        rotate([0, 90, 0]) {
+            translate([-(steer_pin_d/2+2), 0, -inner_bearing_d/2])
+                cylinder(h=inner_bearing_d, d=hole_d);
+            translate([-rod_l+(steer_pin_d/2+2), 0, -inner_bearing_d/2])
+                cylinder(h=inner_bearing_d, d=hole_d);
+        }
+    }
 }
 
 // Overall Car
@@ -318,12 +330,18 @@ module wholeCar () {
     mirror([1, 0, 0])
     rotate([0, 0, -demo_steer_angle])
         steeringMountAndWheel();
+       
+    translate(
+    [body_w - rear_mount_d/2 + steer_bearing_dis, 
+    body_l+8.5, 
+    -wheel_depth+inner_bearing_d/2+1])
+        priTieRod();
 }
 
 
 
 wholeCar();
-//steeringMountAndWheel();
+//priTieRod();
 
 /*
 rotate([0, 90, 0])
