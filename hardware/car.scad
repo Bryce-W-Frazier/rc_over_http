@@ -45,6 +45,18 @@ wheel_lift = 2;
 
 wheel_depth = wheel_lift+rear_mount_d/2;
 
+// PCB Footprint
+L298N_hole_dis = 37;
+L298N_body_l = 43;
+
+rasbpiB_hole_w_dis = 49;
+rasbpiB_hole_l_dis = 58;
+rasbpiB_body_w = 56;
+rasbpiB_body_l = 85;
+rasbpi_screw = 2.5 -2;
+
+pcb_clear = 4;
+
 // Wheels and Axles
 module axle(l, d) {
     difference() {
@@ -178,6 +190,34 @@ module priTieRod() {
     }
 }
 
+//PCB Footprint
+module screwMount(s_h, s_d) {
+    difference() {
+        cylinder(h=s_h, d=s_d+1.5);
+        cylinder(h=s_h, d=s_d);
+    }
+}
+module rasbpi() {
+   screwMount(pcb_clear, rasbpi_screw);
+   translate([rasbpiB_hole_w_dis, 0, 0])
+        screwMount(pcb_clear, rasbpi_screw);
+   translate([0, rasbpiB_hole_l_dis, 0]) {
+        screwMount(pcb_clear, rasbpi_screw);
+        translate([rasbpiB_hole_w_dis, 0, 0])
+            screwMount(pcb_clear, rasbpi_screw);
+    }
+}
+
+module L298N() {
+    screwMount(pcb_clear, rasbpi_screw);
+   translate([L298N_hole_dis, 0, 0])
+        screwMount(pcb_clear, rasbpi_screw);
+   translate([0, L298N_hole_dis, 0]) {
+        screwMount(pcb_clear, rasbpi_screw);
+        translate([L298N_hole_dis, 0, 0])
+            screwMount(pcb_clear, rasbpi_screw);
+    }
+}
 // Overall Car
 module steeringMountAndWheel() {
     steeringWheelMount();
@@ -340,8 +380,9 @@ module wholeCar () {
 
 
 
-wholeCar();
-//priTieRod();
+//wholeCar();
+//rasbpi();
+L298N();
 
 /*
 rotate([0, 90, 0])
