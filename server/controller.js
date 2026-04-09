@@ -34,4 +34,9 @@ export const Controller = {
   setThrottle: function (throttle_level) {
     throttle.pwmWrite(mapRange(throttle_level, throttle_level_range, throttle_pwm_range) );
   },
+
+  stop: function () {
+    this.steer(0);
+    this.setThrottle(0);
+  },
 }
