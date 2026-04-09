@@ -6,10 +6,14 @@
 // Open Web Socket With Werver
 const socket = io();
 
-let changed = false; //TODO notifiy server only if input changes
+// UI Connection Status
+socket.on('connect', () => { console.log("Connected to the car!"); });
+socket.on('disconnect', () => { console.log("CONNECTION LOST OH GOD"); });
 
 //Key Tracker
 const Keys = {};
+let prevSteer = 0;
+let prevThrottle = 0;
 
 window.addEventListener("keydown", (e) => Keys[e.code] = true);
 window.addEventListener("keyup", (e) => Keys[e.code] = false);
@@ -21,21 +25,25 @@ window.setInterval( () => {
   let throttle = 0;
  
   //Steering
-  if (Keys["KeyD"]) {
-    steer_vector += -500;
-  } 
-  if (Keys["KeyA"]) {
-    steer_vector += 500;
-  }
+  if (Keys["KeyD"]) steer_vector += -500;
+  if (Keys["KeyA"]) steer_vector += 500;
 
   //Throttle
-  if (Keys["KeyW"]) {
-    throttle += 100;
+  if (Keys["KeyW"]) throttle += 100;
+
+  //Send Inputs if value changed
+  if (steer_vector !== prevSteer) {
+    socket.emit('steer-to', steer_vector);
+    prevSteer = steer_vector;
   }
 
-  //Send Inputs
-  socket.emit('steer-to', steer_vector);
-  socket.emit('throttle-to', throttle);
+  if (throttle !== prevThrottle) {
+    socket.emit('throttle-to', throttle);
+    prevThrottle = throttle;
+  }
 }, 10);
 
-
+// Failsafe
+window.setInterval(() => {
+  socket.emit('handshake');
+}, 50); // Check for life every 50 ms

@@ -40,17 +40,29 @@ app.get('/', async(req, res) => {
 // ##########################################################
 
 //Handle Client input
+let lastHandshake = Date.now();
+const CONNECT_TIMEOUT = 200; // Kill engines if 200ms pass with no ping.
+
 io.on('connection', (socket) => {
   console.log('Client connected');
+  lastHandshake = Date.now();
 
-  socket.on('steer-to', (steer_vector) => {
-    Controller.steer(steer_vector);
+  socket.on('steer-to', (steer_vector) => Controller.steer(steer_vector));
+  socket.on('throttle-to', (throttle_level) => Controller.setThrottle(throttle_level));
+
+  socket.on('handshake', () => { lastHandshake = Date.now(); });
+  
+  socket.on('disconnect', () => {
+  console.log(`Client disconnected: ${socket.id}`);
+  Controller.stop();
   });
-
-  socket.on('throttle-to', (throttle_level) => {
-    Controller.setThrottle(throttle_level);
-  }); 
 });
+
+setInterval(() => {
+  if (Date.now() - lastHandshake > CONNECT_TIMEOUT) {
+    Controller.stop();
+  }
+}, 10);
 
 socketServer.listen(3000, () => {
   console.log("Server Started, Port: 3000");
