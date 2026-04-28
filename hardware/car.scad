@@ -38,7 +38,7 @@ front_axle_l = front_axle_stop+hub_l+1+axle_insert;
 
 // Body Specs
 body_w = 80;
-body_l = 125;
+body_l = 175;
 body_thic = 4;
 axel_access = 12;
 wheel_lift = 2;
@@ -121,6 +121,35 @@ module motorMount() {
     };
 }
 
+module pully(belt_thic, di) {
+    wall_thic = 1;
+    shell_h = belt_thic+wall_thic*2;
+    resses = belt_thic;
+    
+    difference() {
+        cylinder(h=shell_h, d=belt_thic+di);
+        translate([0, 0, wall_thic])
+        difference() {
+            cylinder(h=belt_thic, d=belt_thic+di);
+            cylinder(h=belt_thic, d=di);
+        }
+        
+    }
+}
+
+module motorPully(){
+    difference() {
+        pully(3, 30);
+        cylinder(5, 2);
+    }
+}
+
+module axlePully(){
+    difference() {
+        pully(3, 10);
+        axle(5, inner_bearing_d+0.5);
+    }
+}
 // Steering
 module steeringWheelMount() {
     dist_from_body = rear_mount_d/2 + wheel_lift;
@@ -376,17 +405,23 @@ module wholeCar () {
     body_l+8.5, 
     -wheel_depth+inner_bearing_d/2+1])
         priTieRod();
+        
+    translate(
+    [rasbpiB_body_w-rasbpiB_hole_w_dis, 
+    rear_mount_d*2+rasbpiB_body_w+1, 
+    body_thic])
+    rotate([0, 0, -90])
+        rasbpi();
 }
 
 
 
 //wholeCar();
-//rasbpi();
-L298N();
 
 /*
 rotate([0, 90, 0])
 translate([-inner_bearing_d/2-0.5, 0, 0])
+mirror([0, 1, 0])
     steeringWheelMount();
 translate([0, 40, 1.5])
 rotate([0,180, 0])
@@ -394,4 +429,19 @@ rotate([0,180, 0])
 translate([0, -50, 0])
 translate([0, 0, 0])
     wheel();
+
+translate([25, 0, 0])
+rotate([0,0,90])
+priTieRod();
 */
+motorPully();
+translate([40, 0, 0])
+    axlePully();
+translate([0, 40, 0])
+    wheel();
+translate([0, 80, 0])
+    wheel();
+translate([-20, 0, 0])
+    axle(body_w+axle_insert*4+2, inner_bearing_d);
+translate([0, -80, 0])
+    motorMount();
